@@ -2,13 +2,8 @@
 
 #include <vector>
 
-#include "iostream"
-
-// A function to implement bubble countingSort
 void bubbleSort(std::vector<int> &vec, int n) {
     for (int i = 0; i < n - 1; i++) {
-        // Last i elements are already
-        // in place
         for (int j = 0; j < n - i - 1; j++) {
             if (vec[j] > vec[j + 1]) {
                 std::swap(vec[j], vec[j + 1]);
@@ -17,29 +12,33 @@ void bubbleSort(std::vector<int> &vec, int n) {
     }
 }
 
-void BubbleSortIversonOne(std::vector<int> &vec, int n) {
-    int i = 0;
-    bool t = true;
-    while (t) {
-        t = false;
-        for (int k = 0; k < n - i - 1; ++k) {
+void bubbleSortIversonOne(std::vector<int> &vec, int n) {
+    int ind = 0;
+    bool flag = true;
+    while (flag) {
+        flag = false;
+        for (int k = 0; k < n - ind - 1; ++k) {
             if (vec[k] > vec[k + 1]) {
-                t = true;
+                flag = true;
                 std::swap(vec[k], vec[k + 1]);
             }
         }
-        i++;
+        ind++;
     }
 }
 
-void BubbleSortIversonTwo(std::vector<int> &vec, int n) {
-    int t = n - 1;
-    while (t != 0) {
-        for (int k = 0; k < t; ++k) {
-            if (vec[k] > vec[k + 1]) {
-                std::swap(vec[k], vec[k + 1]);
-                t = k + 1;
+void bubbleSortIversonTwo(std::vector<int> &vec, int n) {
+    int t = 0;
+    int m = n - 1;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < m; j++) {
+            if (vec[j] > vec[j + 1]) {
+                std::swap(vec[j], vec[j + 1]);
+                t = j;
             }
+        }
+        if (t != 0) {
+            m = t;
         }
     }
 }

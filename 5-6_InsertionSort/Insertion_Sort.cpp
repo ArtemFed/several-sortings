@@ -1,5 +1,18 @@
-#include "Insertion_Sort_binary.h"
+#include "Insertion_Sort.h"
+
 #include <vector>
+
+void insertionSort(std::vector<int>::iterator begin,
+                   std::vector<int>::iterator end) {
+    int tmp;
+    for (int i = 1, j; i < end - begin; ++i) {
+        tmp = *(begin + i);
+        for (j = i - 1; j >= 0 && *(begin + j) >= tmp; --j) {
+            *(begin + j + 1) = *(begin + j);
+        }
+        *(begin + j + 1) = tmp;
+    }
+}
 
 int binarySearch(std::vector<int> vec, int value, int left, int right) {
     if (right <= left) {
@@ -18,7 +31,7 @@ int binarySearch(std::vector<int> vec, int value, int left, int right) {
     return binarySearch(vec, value, left, middle - 1);
 }
 
-void BinaryInsertionSort(std::vector<int> &vec) {
+void insertionBinarySort(std::vector<int> &vec) {
     int n = int(vec.size());
     int i, j, loc, selected;
 

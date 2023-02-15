@@ -2,9 +2,7 @@
 
 #include <vector>
 
-void selectionSort(std::vector<int> &vec) {
-    int n = int(vec.size());
-
+void selectionSort(std::vector<int> &vec, int n) {
     for (int i = 0; i < n - 1; i++) {
         int min_ind = i;
 

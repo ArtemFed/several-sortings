@@ -5,4 +5,6 @@
 void insertionSort(std::vector<int>::iterator begin,
                    std::vector<int>::iterator end);
 
+void insertionBinarySort(std::vector<int> &vec);
+
 #endif//HW1_INSERTION_SORT_H
