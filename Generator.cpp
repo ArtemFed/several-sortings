@@ -5,34 +5,33 @@
 
 class Generator {
 public:
-    static void randomVectorGeneratorEasy(std::vector<int> &vec, int n) {
+    static void randOrderGeneratorMedium(std::vector<int> &vec, int n) {
         srand(std::time(nullptr));
         for (int i = 0; i < n; ++i) {
             vec[i] = rand() % 6;
         }
     }
 
-    static void randomVectorGeneratorHardcore(std::vector<int> &vec, int n) {
+    static void randOrderGeneratorHard(std::vector<int> &vec, int n) {
         srand(std::time(nullptr));
         for (int i = 0; i < n; ++i) {
             vec[i] = rand() % 1000;
         }
     }
 
-    static void descendingOrderVectorGenerator(std::vector<int> &vec, int n) {
-        int current = n;
+    static void nearlySortedGenerator(std::vector<int> &vec, int n, int count) {
+        srand(std::time(nullptr));
         for (int i = 0; i < n; ++i) {
-            vec[i] = current--;
+            vec[i] = i;
+        }
+        for (int i = 0; i < count; ++i) {
+            std::swap(vec[rand() % n], vec[rand() % n]);
         }
     }
 
-    static void nearlySortedVectorGenerator(std::vector<int> &vec, int n) {
-        int current = 0;
-        for (int i = 0; i < n; ++i) {
-            vec[i] = current++;
-        }
-        for (int i = 0; i < int(n * 0.2 + 1); ++i) {
-            std::swap(vec[rand() % n], vec[rand() % n]);
+    static void descendingOrderGenerator(std::vector<int> &vec, int n) {
+        for (int i = n - 1; i >= 0; --i) {
+            vec[i] = i;
         }
     }
 

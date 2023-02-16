@@ -14,34 +14,34 @@
 #include <string>
 #include <unordered_map>
 
-using func = void (*)(std::vector<int> &, int);
+using func = void (*)(std::vector<int> , int);
 
 class Distributor {
-    static void adapterSelectionSort(std::vector<int> &vec, int n) {
+    static void adapterSelectionSort(std::vector<int> vec, int n) {
         selectionSort(vec, n);
     }
 
-    static void adapterBubbleSort(std::vector<int> &vec, int n) {
+    static void adapterBubbleSort(std::vector<int> vec, int n) {
         bubbleSort(vec, n);
     }
 
-    static void adapterBubbleIversonOneSort(std::vector<int> &vec, int n) {
+    static void adapterBubbleIversonOneSort(std::vector<int> vec, int n) {
         bubbleSortIversonOne(vec, n);
     }
 
-    static void adapterBubbleIversonTwoSort(std::vector<int> &vec, int n) {
+    static void adapterBubbleIversonTwoSort(std::vector<int> vec, int n) {
         bubbleSortIversonTwo(vec, n);
     }
 
-    static void adapterInsertionSort(std::vector<int> &vec, int n) {
+    static void adapterInsertionSort(std::vector<int> vec, int n) {
         insertionSort(vec.begin(), vec.end());
     }
 
-    static void adapterInsertionBinarySort(std::vector<int> &vec, int n) {
+    static void adapterInsertionBinarySort(std::vector<int> vec, int n) {
         insertionBinarySort(vec);
     }
 
-    static void adapterCountingSort(std::vector<int> &vec, int n) {
+    static void adapterCountingSort(std::vector<int> vec, int n) {
         if (n <= 1) {
             return;
         }
@@ -53,29 +53,29 @@ class Distributor {
         countingSort(vec, min, max);
     }
 
-    static void adapterRadixSort(std::vector<int> &vec, int n) {
+    static void adapterRadixSort(std::vector<int> vec, int n) {
         std::vector<int> vec_tmp(n);
         msdRadixSort(vec, vec_tmp, 0, n, 0);
     }
 
-    static void adapterMergeSort(std::vector<int> &vec, int n) {
+    static void adapterMergeSort(std::vector<int> vec, int n) {
         std::vector<int> vectorTemp(n);
         mergeSort(vec, vectorTemp, 0, n - 1);
     }
 
-    static void adapterQuickSort(std::vector<int> &vec, int n) {
+    static void adapterQuickSort(std::vector<int> vec, int n) {
         quickSort(vec, 0, n - 1);
     }
 
-    static void adapterHeapSort(std::vector<int> &vec, int n) {
+    static void adapterHeapSort(std::vector<int> vec, int n) {
         heapSort(vec);
     }
 
-    static void adapterShellSort(std::vector<int> &vec, int n) {
+    static void adapterShellSort(std::vector<int> vec, int n) {
         shellSort(vec, n);
     }
 
-    static void adapterShellCiurSort(std::vector<int> &vec, int n) {
+    static void adapterShellCiurSort(std::vector<int> vec, int n) {
         shellSortCiur(vec, n);
     }
 
@@ -133,5 +133,9 @@ public:
             _stream << " - <" << key << ">" << std::endl;
         }
         return _stream;
+    }
+
+    std::vector<std::string> getNames() const {
+        return info;
     }
 };

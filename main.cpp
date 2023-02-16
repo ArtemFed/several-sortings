@@ -1,36 +1,32 @@
+#include <chrono>
 #include <ctime>
 #include <iostream>
+#include <unistd.h>
 #include <vector>
 
-#include "Generator.cpp"
 #include "Distributor.cpp"
+#include "Generator.cpp"
 
-void testBubbleSort() {
-    int current_size = 50;
-    for (int i = 0; i < 5; ++i) {
-        std::vector<int> vector;
-        vector.resize(current_size);
-        Generator::randomVectorGeneratorHardcore(vector, current_size);
-        Generator::printVec(vector, std::cout);
-        bubbleSort(vector, current_size);
-        Generator::printVec(vector, std::cout);
-        std::cout << "\n";
-        current_size += 50;
-    }
+#define COUNT_OF_REPETITIONS 50
+#define SOLO false
 
-    current_size = 100;
-    for (int i = 0; i < 40; ++i) {
-        std::vector<int> vector;
-        vector.resize(current_size);
-
-        current_size += 100;
-    }
-}
-
-static void testAnySort(void(sortingFunc)(std::vector<int> &, int), int n) {
+void testAnySortOnesWithPrint(void(sortingFunc)(std::vector<int> &, int), int n, int mode) {
     std::vector<int> vec(n);
 
-    Generator::randomVectorGeneratorHardcore(vec, n);
+    switch (mode) {
+        case 2:
+            Generator::randOrderGeneratorHard(vec, n);
+            break;
+        case 3:
+            Generator::nearlySortedGenerator(vec, n, int(n * 0.2 + 1));
+            break;
+        case 4:
+            Generator::descendingOrderGenerator(vec, n);
+            break;
+        default:
+            Generator::randOrderGeneratorMedium(vec, n);
+    }
+
     std::flush(std::cout);
 
     Generator::printVec(vec, std::cout);
@@ -39,8 +35,91 @@ static void testAnySort(void(sortingFunc)(std::vector<int> &, int), int n) {
     Generator::printVec(vec, std::cout);
 }
 
-int main() {
-    int n = 10;
+void testAnySort(void(sortingFunc)(std::vector<int>, int), int step1 = 50, int step2 = 100, int mode = 1) {
+    for (int current_size = step1; current_size < 300; current_size += 50) {
+        std::vector<int> vec(current_size);
+        uint64_t sumOfTimes = 0;
+
+        switch (mode) {
+            case 2:
+                Generator::randOrderGeneratorHard(vec, current_size);
+                break;
+            case 3:
+                Generator::nearlySortedGenerator(vec, current_size,
+                                                 int(current_size * 0.2 + 1));
+                break;
+            case 4:
+                Generator::descendingOrderGenerator(vec, current_size);
+                break;
+            default:
+                Generator::randOrderGeneratorMedium(vec, current_size);
+        }
+        //        Generator::printVec(vec, std::cout);
+
+        for (int i = 0; i < COUNT_OF_REPETITIONS; ++i) {
+            auto start = std::chrono::high_resolution_clock::now();
+            sortingFunc(vec, current_size);
+            auto diff = std::chrono::high_resolution_clock::now() - start;
+            sumOfTimes += std::chrono::duration_cast<std::chrono::nanoseconds>(diff).count();
+        }
+
+        std::cout << sumOfTimes / COUNT_OF_REPETITIONS << "\n";
+
+        //        Generator::printVec(vec, std::cout);
+
+        //        std::cout << "\n";
+    }
+
+    for (int current_size = step2; current_size < 4100; current_size += 100) {
+        std::vector<int> vector;
+        vector.resize(current_size);
+
+    }
+}
+
+void testAnySortWithVec(void(sortingFunc)(std::vector<int>, int), int step1 = 50, int step2 = 100, int mode = 1) {
+    for (int current_size = step1; current_size < 300; current_size += 50) {
+        std::vector<int> vec(current_size);
+        uint64_t sumOfTimes = 0;
+
+        switch (mode) {
+            case 2:
+                Generator::randOrderGeneratorHard(vec, current_size);
+                break;
+            case 3:
+                Generator::nearlySortedGenerator(vec, current_size,
+                                                 int(current_size * 0.2 + 1));
+                break;
+            case 4:
+                Generator::descendingOrderGenerator(vec, current_size);
+                break;
+            default:
+                Generator::randOrderGeneratorMedium(vec, current_size);
+        }
+        //        Generator::printVec(vec, std::cout);
+
+        for (int i = 0; i < COUNT_OF_REPETITIONS; ++i) {
+            auto start = std::chrono::high_resolution_clock::now();
+            sortingFunc(vec, current_size);
+            auto diff = std::chrono::high_resolution_clock::now() - start;
+            sumOfTimes += std::chrono::duration_cast<std::chrono::nanoseconds>(diff).count();
+        }
+
+        std::cout << sumOfTimes / COUNT_OF_REPETITIONS << "\n";
+
+        //        Generator::printVec(vec, std::cout);
+
+        //        std::cout << "\n";
+    }
+
+    for (int current_size = step2; current_size < 4100; current_size += 100) {
+        std::vector<int> vector;
+        vector.resize(current_size);
+
+    }
+}
+
+void restAPI() {
     Distributor distributor = Distributor();
 
     std::cout << "Available commands:\n";
@@ -58,10 +137,35 @@ int main() {
         }
 
         if (distributor.containsKey(line)) {
-            testAnySort(distributor.getFunc(line), n);
+            //            testAnySortOnesWithPrint(distributor.getFunc(line), n);
+            testAnySort(distributor.getFunc(line));
         } else {
             continue;
         }
+    }
+}
+
+void callAllSorts() {
+    Distributor distributor = Distributor();
+
+    std::vector<std::string> vecOfNames = distributor.getNames();
+
+    for (std::string& name : vecOfNames) {
+        std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+        if (distributor.containsKey(name)) {
+            testAnySort(distributor.getFunc(name));
+        }
+    }
+}
+
+int main() {
+    int n = 0;
+
+    if (SOLO) {
+        restAPI();
+    } else {
+        callAllSorts();
     }
 
     return 0;
