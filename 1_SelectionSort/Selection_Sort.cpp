@@ -2,7 +2,8 @@
 
 #include <vector>
 
-void selectionSort(std::vector<int> &vec, int n) {
+std::size_t selectionSort(std::vector<int> &vec, int n) {
+    std::size_t count = 0;
     for (int i = 0; i < n - 1; i++) {
         int min_ind = i;
 
@@ -14,4 +15,5 @@ void selectionSort(std::vector<int> &vec, int n) {
 
         std::swap(vec[min_ind], vec[i]);
     }
+//    return counter;
 }

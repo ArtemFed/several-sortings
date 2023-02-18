@@ -10,11 +10,14 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
+#include <fstream>
+#include <iostream>
+#include <map>
 #include <ostream>
 #include <string>
 #include <unordered_map>
 
-using func = void (*)(std::vector<int> , int);
+using func = void (*)(std::vector<int>, int);
 
 class Distributor {
     static void adapterSelectionSort(std::vector<int> vec, int n) {
@@ -50,7 +53,11 @@ class Distributor {
             max = std::max(max, vec[i]);
             min = std::min(min, vec[i]);
         }
-        countingSort(vec, min, max);
+        stableCountingSort(vec, max - min + 1, min, n);
+        //        for (auto item : vec) {
+        //            std::cout << item << " ";
+        //        }
+        //        std::cout << "]\n";
     }
 
     static void adapterRadixSort(std::vector<int> vec, int n) {
@@ -94,23 +101,15 @@ class Distributor {
         map["shell"] = adapterShellSort;
         map["shellciur"] = adapterShellCiurSort;
 
-        info.emplace_back("Selection");
-        info.emplace_back("Bubble");
-        info.emplace_back("BubbleIv1");
-        info.emplace_back("BubbleIv2");
-        info.emplace_back("Insertion");
-        info.emplace_back("InsertionBinary");
-        info.emplace_back("Counting");
-        info.emplace_back("Radix");
-        info.emplace_back("Merge");
-        info.emplace_back("Quick");
-        info.emplace_back("Heap");
-        info.emplace_back("Shell");
-        info.emplace_back("ShellCiur");
+        sortNames = std::vector<std::string>();
+        sortNames.reserve(map.size());
+        for (auto const &item : map) {
+            sortNames.emplace_back(item.first);
+        }
     }
 
     std::unordered_map<std::string, func> map = std::unordered_map<std::string, func>();
-    std::vector<std::string> info = std::vector<std::string>();
+    std::vector<std::string> sortNames;
 
 public:
     Distributor() {
@@ -118,24 +117,90 @@ public:
     }
 
     explicit Distributor(const std::unordered_map<std::string, func> &map) : map(map) {
+        sortNames = std::vector<std::string>(map.size());
+        for (auto const &item : map) {
+            sortNames.push_back(item.first);
+        }
     }
 
-    func getFunc(const std::string &key) {
-        return map[key];
+    func getFunc(const std::string &key) const {
+        return map.at(key);
     }
 
-    bool containsKey(const std::string &key) {
+    bool containsKey(const std::string &key) const {
         return map.find(key) != map.end();
     }
 
     friend std::ostream &operator<<(std::ostream &_stream, Distributor const &dist) {
-        for (const auto& key : dist.info) {
+        for (const auto &key : dist.sortNames) {
             _stream << " - <" << key << ">" << std::endl;
         }
         return _stream;
     }
 
     std::vector<std::string> getNames() const {
-        return info;
+        return sortNames;
     }
+
+    int getSize() const {
+        return int(sortNames.size());
+    }
+
+    void printTests(bool flag, const std::string &path) {
+        std::map<std::string, std::ofstream> outStreams{};
+
+        for (int i = 0; i < sortNames.size(); ++i) {
+            std::ofstream file{path + sortNames[i] + ".csv"};
+            file.close();
+            outStreams[sortNames[i]].open(path + sortNames[i] + ".csv", std::ios::app);
+        }
+
+        std::string line;
+        // Получаем пару { название сортировки, map с различными видами тестов }
+        for (auto &sortItem : tests) {
+            line = sortItem.first + "\n";
+            if (flag) {
+                outStreams[sortItem.first] << line;
+            } else {
+                std::cout << line;
+            }
+
+            // Получаем пару { название типа генерации, vector с различными возрастающими замерами }
+            for (auto &typeItem : sortItem.second) {
+                line = typeItem.first + "\n";
+                if (flag) {
+                    outStreams[sortItem.first] << line;
+                } else {
+                    std::cout << line;
+                }
+                for (auto &testItem : typeItem.second) {
+                    line =  testItem + "\n";
+                    // По имени сортировки берём
+                    if (flag) {
+                        outStreams[sortItem.first] << line;
+                    } else {
+                        std::cout << line;
+                    }
+                }
+            }
+            line = "\n";
+            if (flag) {
+                outStreams[sortItem.first] << line;
+            } else {
+                std::cout << line;
+            }
+        }
+
+        for (auto &outStream : outStreams) {
+            outStream.second.close();
+        }
+    }
+
+    void clearTests() {
+        tests.clear();
+    }
+
+
+    // map< sortName -> map<genName -> vec< time of test > > >
+    std::map<std::string, std::map<std::string, std::vector<std::string>>> tests{};
 };

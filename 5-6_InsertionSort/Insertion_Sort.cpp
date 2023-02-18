@@ -2,8 +2,8 @@
 
 #include <vector>
 
-void insertionSort(std::vector<int>::iterator begin,
-                   std::vector<int>::iterator end) {
+int insertionSort(std::vector<int>::iterator begin,
+                  std::vector<int>::iterator end) {
     int tmp;
     for (int i = 1, j; i < end - begin; ++i) {
         tmp = *(begin + i);
@@ -15,36 +15,34 @@ void insertionSort(std::vector<int>::iterator begin,
 }
 
 int binarySearch(std::vector<int> vec, int value, int left, int right) {
-    if (right <= left) {
-        return (value > vec[left]) ? (left + 1) : left;
+    while (left <= right) {
+        int middle = left + (right - left) / 2;
+
+        if (vec[middle] == value) {
+            return middle + 1;
+        } else if (vec[middle] < value) {
+            left = middle + 1;
+        } else {
+            right = middle - 1;
+        }
     }
 
-    int middle = left + (right - left) / 2;
-
-    if (value == vec[middle]) {
-        return middle + 1;
-    }
-
-    if (value > vec[middle]) {
-        return binarySearch(vec, value, middle + 1, right);
-    }
-    return binarySearch(vec, value, left, middle - 1);
+    return left;
 }
 
-void insertionBinarySort(std::vector<int> &vec) {
+int insertionBinarySort(std::vector<int> &vec) {
     int n = int(vec.size());
-    int i, j, loc, selected;
+    int i, j, ind, curr;
 
     for (i = 1; i < n; ++i) {
         j = i - 1;
-        selected = vec[i];
+        curr = vec[i];
 
-        loc = binarySearch(vec, selected, 0, j);
+        ind = binarySearch(vec, curr, 0, j);
 
-        while (j >= loc) {
-            vec[j + 1] = vec[j];
-            j--;
+        while (j >= ind) {
+            vec[j + 1] = vec[j--];
         }
-        vec[j + 1] = selected;
+        vec[j + 1] = curr;
     }
 }

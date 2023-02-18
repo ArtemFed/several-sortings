@@ -2,6 +2,6 @@
 #define HW1_SELECTION_SORT_H
 
 #include <vector>
-void selectionSort(std::vector<int> &vec, int n);
+std::size_t selectionSort(std::vector<int> &vec, int n);
 
 #endif//HW1_SELECTION_SORT_H
