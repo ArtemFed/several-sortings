@@ -1,6 +1,7 @@
 #include "Quick_Sort.h"
 
 int partition(std::vector<int> &vec, int left, int right, std::size_t *count) {
+    // Первый опорный
     int piv = vec[right];
     int i = (left - 1);
     for (int j = left; j <= right - 1; j++) {
