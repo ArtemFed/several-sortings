@@ -26,25 +26,25 @@ void msdRadixSort(std::vector<int> &vec_a, std::vector<int> &vec_help, int l, in
     }
 
     std::vector<int> cnt(kK + 2, 0);
-    *count += kK + 6;
+    *count += kK + 7;
     for (int i = l; i < r; ++i) {
         ++cnt[digit(vec_a[i], d) + 2];
-        *count += 6 + 4;
+        *count += 16;
     }
 
     for (int i = 0; i < kK + 1; ++i) {
         cnt[i + 1] += cnt[i];
-        *count += 13 + 4;
+        *count += 13;
     }
 
     for (int i = l; i < r; ++i) {
         vec_help[cnt[digit(vec_a[i], d) + 1]++] = vec_a[i];
-        *count += 21;
+        *count += 20;
     }
 
     for (int i = l; i < r; ++i) {
         vec_a[i] = vec_help[i - l];
-        *count += 23;
+        *count += 11;
     }
 
     // Вызываем сортировки для значений с правильными границами и сдвигаем разряд на 1

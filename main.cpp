@@ -171,6 +171,12 @@ void callAllSorts() {
 }
 
 int main() {
+//    Distributor dist = Distributor();
+//    auto s = dist.getNames();
+//    std::sort(s.begin(), s.end());
+//    for (auto item : s) {
+//        std::cout << "'" << item << "', ";
+//    }
 
     if (ALL) {
         callAllSorts();
