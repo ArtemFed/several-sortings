@@ -60,7 +60,7 @@ class Distributor {
     }
 
     static size_t adapterRadixSort(std::vector<int> vec, int n) {
-        size_t count;
+        size_t count = 0;
         std::vector<int> vec_tmp(n);
         msdRadixSort(vec, vec_tmp, 0, n, 0, &count);
         return count;

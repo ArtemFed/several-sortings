@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-const int kK = 256;
+const int kK = 32;
 
 // Сложность 4
 int digit(int elem, int i) {
@@ -12,7 +12,7 @@ int digit(int elem, int i) {
         return -1;
     }
     // Обращение по индексу к int
-    return elem >> (8 * (3 - i)) & (255);
+    return elem >> (8 * (3 - i)) & (31);
 }
 
 void msdRadixSort(std::vector<int> &vec_a, std::vector<int> &vec_help, int l, int r, int d, std::size_t *count) {

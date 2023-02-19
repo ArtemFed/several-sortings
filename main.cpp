@@ -9,7 +9,7 @@
 #include "Distributor.cpp"
 #include "Generator.cpp"
 
-#define COUNT_OF_REPETITIONS 10
+#define COUNT_OF_REPETITIONS 20
 #define COUNT_OF_GENERATORS 4
 #define ALL true
 
@@ -103,7 +103,7 @@ void testAllSorts(std::vector<int> &vec,
                 genName = "hard";
                 break;
             case 3:
-                Generator::nearlySortedGenerator(vec, currentSize, int(currentSize * 0.2 + 1));
+                Generator::nearlySortedGenerator(vec, currentSize, int(currentSize * 0.05 + 1));
                 genName = "near";
                 break;
             case 4:
