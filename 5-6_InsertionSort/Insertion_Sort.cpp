@@ -38,22 +38,21 @@ int binarySearch(std::vector<int> vec, int value, int left, int right, std::size
     return left;
 }
 
-void insertionBinarySort(std::vector<int> &vec, std::size_t *count) {
-    *count += 3;
-    int n = int(vec.size());
-    int i, j, ind, curr;
+void insertionBinarySort(std::vector<int> &vec, int n, std::size_t *count) {
+    int i, position, j, tmp;
 
+    *count += 1;
     for (i = 1; i < n; ++i) {
         j = i - 1;
-        curr = vec[i];
+        tmp = vec[i];
 
-        ind = binarySearch(vec, curr, 0, j, count);
+        position = binarySearch(vec, tmp, 0, j, count);
 
-        while (j >= ind) {
-            vec[j + 1] = vec[j--];
-            *count += 11;
+        while (j >= position) {
+            vec[j + 1] = vec[j];
+            j--;
         }
-        vec[j + 1] = curr;
-        *count += 12;
+        vec[j + 1] = tmp;
+        *count += 15;
     }
 }

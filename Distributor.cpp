@@ -17,36 +17,55 @@
 #include <string>
 #include <unordered_map>
 
-using func = size_t (*)(std::vector<int>, int);
+using func = size_t (*)(std::vector<int>&, int);
 
 class Distributor {
-    static size_t adapterSelectionSort(std::vector<int> vec, int n) {
-        return selectionSort(vec, n);
+    static void isSorted(const std::vector<int> &vec, const std::string &name) {
+        for (int i = 0; i < int(vec.size()) - 1; ++i) {
+            if (vec[i] > vec[i + 1]) {
+                throw std::runtime_error(name);
+            }
+        }
     }
 
-    static size_t adapterBubbleSort(std::vector<int> vec, int n) {
-        return bubbleSort(vec, n);
-    }
-
-    static size_t adapterBubbleIversonOneSort(std::vector<int> vec, int n) {
-        return bubbleSortIversonOne(vec, n);
-    }
-
-    static size_t adapterBubbleIversonTwoSort(std::vector<int> vec, int n) {
-        return bubbleSortIversonTwo(vec, n);
-    }
-
-    static size_t adapterInsertionSort(std::vector<int> vec, int n) {
-        return insertionSort(vec.begin(), vec.end());
-    }
-
-    static size_t adapterInsertionBinarySort(std::vector<int> vec, int n) {
-        size_t count = 0;
-        insertionBinarySort(vec, &count);
+    static size_t adapterSelectionSort(std::vector<int> &vec, int n) {
+        size_t count = selectionSort(vec, n);
+        //        isSorted(vec, "selectionSort");
         return count;
     }
 
-    static size_t adapterCountingSort(std::vector<int> vec, int n) {
+    static size_t adapterBubbleSort(std::vector<int> &vec, int n) {
+        size_t count = bubbleSort(vec, n);
+        //        isSorted(vec, "bubbleSort");
+        return count;
+    }
+
+    static size_t adapterBubbleIversonOneSort(std::vector<int> &vec, int n) {
+        size_t count = bubbleSortIversonOne(vec, n);
+        //        isSorted(vec, "bubbleSortIversonOne");
+        return count;
+    }
+
+    static size_t adapterBubbleIversonTwoSort(std::vector<int> &vec, int n) {
+        size_t count = bubbleSortIversonTwo(vec, n);
+        //        isSorted(vec, "bubbleSortIversonTwo");
+        return count;
+    }
+
+    static size_t adapterInsertionSort(std::vector<int> &vec, int n) {
+        size_t count = insertionSort(vec.begin(), vec.end());
+        //        isSorted(vec, "insertionSort");
+        return count;
+    }
+
+    static size_t adapterInsertionBinarySort(std::vector<int> &vec, int n) {
+        size_t count = 0;
+        insertionBinarySort(vec, n, &count);
+        //        isSorted(vec, "insertionBinarySort");
+        return count;
+    }
+
+    static size_t adapterCountingSort(std::vector<int> &vec, int n) {
         if (n <= 1) {
             return 1;
         }
@@ -56,41 +75,51 @@ class Distributor {
             min = std::min(min, vec[i]);
             count += 11;
         }
-        return stableCountingSort(vec, max - min + 1, min, n) + count;
+        size_t countS = stableCountingSort(vec, max - min + 1, min, n) + count;
+        //        isSorted(vec, "stableCountingSort");
+        return countS;
     }
 
-    static size_t adapterRadixSort(std::vector<int> vec, int n) {
+    static size_t adapterRadixSort(std::vector<int> &vec, int n) {
         size_t count = 0;
         std::vector<int> vec_tmp(n);
         msdRadixSort(vec, vec_tmp, 0, n, 0, &count);
+        //        isSorted(vec, "msdRadixSort");
         return count;
     }
 
-    static size_t adapterMergeSort(std::vector<int> vec, int n) {
+    static size_t adapterMergeSort(std::vector<int> &vec, int n) {
         size_t count = 0;
         std::vector<int> vectorTemp(n);
         mergeSort(vec, vectorTemp, 0, n - 1, &count);
+        //        isSorted(vec, "mergeSort");
         return count;
     }
 
-    static size_t adapterQuickSort(std::vector<int> vec, int n) {
+    static size_t adapterQuickSort(std::vector<int> &vec, int n) {
         size_t count = 0;
         quickSort(vec, 0, n - 1, &count);
+        //        isSorted(vec, "quickSort");
         return count;
     }
 
-    static size_t adapterHeapSort(std::vector<int> vec, int n) {
+    static size_t adapterHeapSort(std::vector<int> &vec, int n) {
         size_t count = 0;
         heapSort(vec, &count);
+        //        isSorted(vec, "heapSort");
         return count;
     }
 
-    static size_t adapterShellSort(std::vector<int> vec, int n) {
-        return shellSort(vec, n);
+    static size_t adapterShellSort(std::vector<int> &vec, int n) {
+        size_t count = shellSort(vec, n);
+        //        isSorted(vec, "shellSort");
+        return count;
     }
 
-    static size_t adapterShellCiurSort(std::vector<int> vec, int n) {
-        return shellSortCiur(vec, n);
+    static size_t adapterShellCiurSort(std::vector<int> &vec, int n) {
+        size_t count = shellSortCiur(vec, n);
+        //        isSorted(vec, "shellSortCiur");
+        return count;
     }
 
     void initializeMap() {

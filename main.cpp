@@ -1,19 +1,17 @@
 #include <chrono>
 #include <ctime>
-#include <fstream>
 #include <iostream>
 #include <map>
-#include <unistd.h>
 #include <vector>
 
 #include "Distributor.cpp"
 #include "Generator.cpp"
 
-#define COUNT_OF_REPETITIONS 20
+#define COUNT_OF_REPETITIONS 10
 #define COUNT_OF_GENERATORS 4
 #define ALL true
 
-void testOneSort(size_t(sortingFunc)(std::vector<int>, int), int step1 = 50, int step2 = 100, int mode = 1) {
+void testOneSort(size_t(sortingFunc)(std::vector<int> &, int), int step1 = 50, int step2 = 100, int mode = 1) {
     std::string funcName, genName;
 
     for (int current_size = step1; current_size < 300; current_size += 50) {
@@ -23,20 +21,16 @@ void testOneSort(size_t(sortingFunc)(std::vector<int>, int), int step1 = 50, int
         switch (mode) {
             case 2:
                 Generator::randOrderGeneratorHard(vec, current_size);
-                genName = "Hard";
                 break;
             case 3:
                 Generator::nearlySortedGenerator(vec, current_size,
                                                  int(current_size * 0.2 + 1));
-                genName = "Near";
                 break;
             case 4:
                 Generator::descendingOrderGenerator(vec, current_size);
-                genName = "Desc";
                 break;
             default:
                 Generator::randOrderGeneratorMedium(vec, current_size);
-                genName = "Medm";
         }
         Generator::printVec(vec, std::cout);
 
@@ -92,8 +86,8 @@ void testAllSorts(std::vector<int> &vec,
                   Distributor &distributor) {
 
     std::string genName;
-    uint64_t sumOfTimes;
-    size_t countOfOperations;
+    uint64_t sumOfTimes = 0;
+    size_t countOfOperations = 0;
 
     for (int mode = 1; mode <= COUNT_OF_GENERATORS; mode++) {
         // Генерирую случайный вектор выбранным генератором
@@ -103,7 +97,7 @@ void testAllSorts(std::vector<int> &vec,
                 genName = "hard";
                 break;
             case 3:
-                Generator::nearlySortedGenerator(vec, currentSize, int(currentSize * 0.05 + 1));
+                Generator::nearlySortedGenerator(vec, currentSize, int(currentSize * 0.01 + 1));
                 genName = "near";
                 break;
             case 4:
@@ -121,14 +115,18 @@ void testAllSorts(std::vector<int> &vec,
 
             if (distributor.containsKey(*sortName)) {
                 sumOfTimes = 0;
-                countOfOperations = (distributor.getFunc(*sortName))(vec, currentSize);
+                std::vector<int> tmpVec1(vec.begin(), vec.end());
+
+                countOfOperations = (distributor.getFunc(*sortName))(tmpVec1, currentSize);
                 for (int j = 0; j < COUNT_OF_REPETITIONS; ++j) {
+
+                    std::vector<int> tmpVec(vec.begin(), vec.end());
 
                     auto start = std::chrono::high_resolution_clock::now();
                     // Вызываю функцию сортировки из map
-                    (distributor.getFunc(*sortName))(vec, currentSize);
-
+                    (distributor.getFunc(*sortName))(tmpVec, currentSize);
                     auto diff = std::chrono::high_resolution_clock::now() - start;
+
                     sumOfTimes += std::chrono::duration_cast<std::chrono::nanoseconds>(diff).count();
                 }
                 distributor.tests[*sortName][genName].emplace_back(
@@ -171,12 +169,6 @@ void callAllSorts() {
 }
 
 int main() {
-//    Distributor dist = Distributor();
-//    auto s = dist.getNames();
-//    std::sort(s.begin(), s.end());
-//    for (auto item : s) {
-//        std::cout << "'" << item << "', ";
-//    }
 
     if (ALL) {
         callAllSorts();
