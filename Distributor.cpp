@@ -1,3 +1,8 @@
+// АиСД-2, 2023, задание 5
+// Федоров Артём Олегович БПИ217
+// Clion для C++ и VS Code для python (.ipynb)
+// Сделано: всё
+
 #include "10_QuickSort/Quick_Sort.h"
 #include "11_HeapSort/Heap_Sort.h"
 #include "12-13_ShellSort/Shell_Sort.h"
@@ -144,7 +149,7 @@ class Distributor {
         }
     }
 
-    std::unordered_map<std::string, func> map = std::unordered_map<std::string, func>();
+    std::map<std::string, func> map = std::map<std::string, func>();
     std::vector<std::string> sortNames;
 
 public:
@@ -152,7 +157,7 @@ public:
         initializeMap();
     }
 
-    explicit Distributor(const std::unordered_map<std::string, func> &map) : map(map) {
+    explicit Distributor(const std::map<std::string, func> &map) : map(map) {
         sortNames = std::vector<std::string>(map.size());
         for (auto const &item : map) {
             sortNames.push_back(item.first);

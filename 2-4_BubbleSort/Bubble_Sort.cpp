@@ -18,44 +18,51 @@ std::size_t bubbleSort(std::vector<int> &vec, int n) {
 }
 
 std::size_t bubbleSortIversonOne(std::vector<int> &vec, int n) {
-    std::size_t count = 2;
-    int ind = 0;
-    bool flag = true;
-    while (flag) {
+    std::size_t count = 1;
+    bool flag;
+
+    for (int i = 0; i < n - 1; ++i) {
         flag = false;
-        for (int k = 0; k < n - ind - 1; ++k) {
-            if (vec[k] > vec[k + 1]) {
+
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (vec[j] > vec[j + 1]) {
+                std::swap(vec[j], vec[j + 1]);
                 flag = true;
-                std::swap(vec[k], vec[k + 1]);
                 count += 11;
             }
             count += 13;
         }
-        ind++;
         count += 4;
+        if (!flag) {
+            break;
+        }
     }
     return count;
 }
 
 std::size_t bubbleSortIversonTwo(std::vector<int> &vec, int n) {
-    std::size_t count = 4;
-    int t = 0;
-    int m = n - 1;
-    for (int i = 0; i < n - 1; i++) {
-        count += 5;
-        for (int j = 0; j < m; j++) {
+    std::size_t count = 3;
+    int prev = n - 1;
+    bool flag;
+    for (int i = 0; i < n - 1; ++i) {
+        flag = false;
+        int top = prev;
+        prev = 0;
+
+        for (int j = 0; j < top; ++j) {
             if (vec[j] > vec[j + 1]) {
                 std::swap(vec[j], vec[j + 1]);
-                t = j;
-                count += 11;
+                flag = true;
+                prev = j;
+                count += 12;
             }
             count += 11;
         }
-        if (t != 0) {
-            m = t;
-            count += 1;
+
+        count += 10;
+        if (!flag) {
+            break;
         }
-        count += 1;
     }
     return count;
 }
