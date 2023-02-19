@@ -13,7 +13,7 @@
 #define COUNT_OF_GENERATORS 4
 #define ALL true
 
-void testOneSort(void(sortingFunc)(std::vector<int>, int), int step1 = 50, int step2 = 100, int mode = 1) {
+void testOneSort(size_t(sortingFunc)(std::vector<int>, int), int step1 = 50, int step2 = 100, int mode = 1) {
     std::string funcName, genName;
 
     for (int current_size = step1; current_size < 300; current_size += 50) {
@@ -89,31 +89,30 @@ void requestGetter() {
 void testAllSorts(std::vector<int> &vec,
                   const int currentSize,
                   const std::vector<std::string> &vecOfSortsNames,
-                  Distributor &distributor
-                  ) {
+                  Distributor &distributor) {
 
     std::string genName;
     uint64_t sumOfTimes;
-
+    size_t countOfOperations;
 
     for (int mode = 1; mode <= COUNT_OF_GENERATORS; mode++) {
         // Генерирую случайный вектор выбранным генератором
         switch (mode) {
             case 2:
                 Generator::randOrderGeneratorHard(vec, currentSize);
-                genName = "Hard";
+                genName = "hard";
                 break;
             case 3:
                 Generator::nearlySortedGenerator(vec, currentSize, int(currentSize * 0.2 + 1));
-                genName = "Near";
+                genName = "near";
                 break;
             case 4:
                 Generator::descendingOrderGenerator(vec, currentSize);
-                genName = "Desc";
+                genName = "desc";
                 break;
             default:
                 Generator::randOrderGeneratorMedium(vec, currentSize);
-                genName = "Medm";
+                genName = "medm";
         }
 
         // Вызываем все сортировки для тестирования на одном и том же векторе
@@ -122,6 +121,7 @@ void testAllSorts(std::vector<int> &vec,
 
             if (distributor.containsKey(*sortName)) {
                 sumOfTimes = 0;
+                countOfOperations = (distributor.getFunc(*sortName))(vec, currentSize);
                 for (int j = 0; j < COUNT_OF_REPETITIONS; ++j) {
 
                     auto start = std::chrono::high_resolution_clock::now();
@@ -132,7 +132,7 @@ void testAllSorts(std::vector<int> &vec,
                     sumOfTimes += std::chrono::duration_cast<std::chrono::nanoseconds>(diff).count();
                 }
                 distributor.tests[*sortName][genName].emplace_back(
-                        std::to_string(currentSize) + ";" + std::to_string(sumOfTimes / COUNT_OF_REPETITIONS) + ";");
+                        std::to_string(currentSize) + ";" + std::to_string(sumOfTimes / COUNT_OF_REPETITIONS) + ";" + std::to_string(countOfOperations));
             }
         }
     }
@@ -153,7 +153,7 @@ void callAllSorts() {
         testAllSorts(vec, currentSize, vecOfSortsNames, distributor);
     }
 
-    distributor.printTests(true, R"(..\tests\size300\)");
+    distributor.printTests(300, R"(..\tests\size300\)");
 
 
     std::cout << "==========================================\n";
@@ -167,7 +167,7 @@ void callAllSorts() {
         testAllSorts(vec, currentSize, vecOfSortsNames, distributor);
     }
 
-    distributor.printTests(true, R"(..\tests\size4100\)");
+    distributor.printTests(4100, R"(..\tests\size4100\)");
 }
 
 int main() {

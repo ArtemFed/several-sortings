@@ -17,73 +17,80 @@
 #include <string>
 #include <unordered_map>
 
-using func = void (*)(std::vector<int>, int);
+using func = size_t (*)(std::vector<int>, int);
 
 class Distributor {
-    static void adapterSelectionSort(std::vector<int> vec, int n) {
-        selectionSort(vec, n);
+    static size_t adapterSelectionSort(std::vector<int> vec, int n) {
+        return selectionSort(vec, n);
     }
 
-    static void adapterBubbleSort(std::vector<int> vec, int n) {
-        bubbleSort(vec, n);
+    static size_t adapterBubbleSort(std::vector<int> vec, int n) {
+        return bubbleSort(vec, n);
     }
 
-    static void adapterBubbleIversonOneSort(std::vector<int> vec, int n) {
-        bubbleSortIversonOne(vec, n);
+    static size_t adapterBubbleIversonOneSort(std::vector<int> vec, int n) {
+        return bubbleSortIversonOne(vec, n);
     }
 
-    static void adapterBubbleIversonTwoSort(std::vector<int> vec, int n) {
-        bubbleSortIversonTwo(vec, n);
+    static size_t adapterBubbleIversonTwoSort(std::vector<int> vec, int n) {
+        return bubbleSortIversonTwo(vec, n);
     }
 
-    static void adapterInsertionSort(std::vector<int> vec, int n) {
-        insertionSort(vec.begin(), vec.end());
+    static size_t adapterInsertionSort(std::vector<int> vec, int n) {
+        return insertionSort(vec.begin(), vec.end());
     }
 
-    static void adapterInsertionBinarySort(std::vector<int> vec, int n) {
-        insertionBinarySort(vec);
+    static size_t adapterInsertionBinarySort(std::vector<int> vec, int n) {
+        size_t count = 0;
+        insertionBinarySort(vec, &count);
+        return count;
     }
 
-    static void adapterCountingSort(std::vector<int> vec, int n) {
+    static size_t adapterCountingSort(std::vector<int> vec, int n) {
         if (n <= 1) {
-            return;
+            return 1;
         }
-        int max = INT16_MIN, min = INT16_MAX;
+        int max = INT16_MIN, min = INT16_MAX, count = 1;
         for (int i = 0; i < n; ++i) {
             max = std::max(max, vec[i]);
             min = std::min(min, vec[i]);
+            count += 11;
         }
-        stableCountingSort(vec, max - min + 1, min, n);
-        //        for (auto item : vec) {
-        //            std::cout << item << " ";
-        //        }
-        //        std::cout << "]\n";
+        return stableCountingSort(vec, max - min + 1, min, n) + count;
     }
 
-    static void adapterRadixSort(std::vector<int> vec, int n) {
+    static size_t adapterRadixSort(std::vector<int> vec, int n) {
+        size_t count;
         std::vector<int> vec_tmp(n);
-        msdRadixSort(vec, vec_tmp, 0, n, 0);
+        msdRadixSort(vec, vec_tmp, 0, n, 0, &count);
+        return count;
     }
 
-    static void adapterMergeSort(std::vector<int> vec, int n) {
+    static size_t adapterMergeSort(std::vector<int> vec, int n) {
+        size_t count = 0;
         std::vector<int> vectorTemp(n);
-        mergeSort(vec, vectorTemp, 0, n - 1);
+        mergeSort(vec, vectorTemp, 0, n - 1, &count);
+        return count;
     }
 
-    static void adapterQuickSort(std::vector<int> vec, int n) {
-        quickSort(vec, 0, n - 1);
+    static size_t adapterQuickSort(std::vector<int> vec, int n) {
+        size_t count = 0;
+        quickSort(vec, 0, n - 1, &count);
+        return count;
     }
 
-    static void adapterHeapSort(std::vector<int> vec, int n) {
-        heapSort(vec);
+    static size_t adapterHeapSort(std::vector<int> vec, int n) {
+        size_t count = 0;
+        heapSort(vec, &count);
+        return count;
     }
 
-    static void adapterShellSort(std::vector<int> vec, int n) {
-        shellSort(vec, n);
+    static size_t adapterShellSort(std::vector<int> vec, int n) {
+        return shellSort(vec, n);
     }
 
-    static void adapterShellCiurSort(std::vector<int> vec, int n) {
-        shellSortCiur(vec, n);
+    static size_t adapterShellCiurSort(std::vector<int> vec, int n) {
+        return shellSortCiur(vec, n);
     }
 
     void initializeMap() {
@@ -146,53 +153,25 @@ public:
         return int(sortNames.size());
     }
 
-    void printTests(bool flag, const std::string &path) {
-        std::map<std::string, std::ofstream> outStreams{};
-
-        for (int i = 0; i < sortNames.size(); ++i) {
-            std::ofstream file{path + sortNames[i] + ".csv"};
-            file.close();
-            outStreams[sortNames[i]].open(path + sortNames[i] + ".csv", std::ios::app);
-        }
-
-        std::string line;
+    void printTests(int num, const std::string &path) {
+        std::string line, fileName;
         // Получаем пару { название сортировки, map с различными видами тестов }
         for (auto &sortItem : tests) {
-            line = sortItem.first + "\n";
-            if (flag) {
-                outStreams[sortItem.first] << line;
-            } else {
-                std::cout << line;
-            }
 
             // Получаем пару { название типа генерации, vector с различными возрастающими замерами }
             for (auto &typeItem : sortItem.second) {
-                line = typeItem.first + "\n";
-                if (flag) {
-                    outStreams[sortItem.first] << line;
-                } else {
-                    std::cout << line;
-                }
-                for (auto &testItem : typeItem.second) {
-                    line =  testItem + "\n";
-                    // По имени сортировки берём
-                    if (flag) {
-                        outStreams[sortItem.first] << line;
-                    } else {
-                        std::cout << line;
-                    }
-                }
-            }
-            line = "\n";
-            if (flag) {
-                outStreams[sortItem.first] << line;
-            } else {
-                std::cout << line;
-            }
-        }
+                fileName = sortItem.first + "_" + typeItem.first + "_" + std::to_string(num);
+                std::cout << fileName << "\n";
 
-        for (auto &outStream : outStreams) {
-            outStream.second.close();
+                std::ofstream file{path + fileName + ".csv"};
+                file << "size;time;operations\n";
+
+                for (auto &testItem : typeItem.second) {
+                    file << testItem + "\n";
+                }
+                file << "\n";
+                file.close();
+            }
         }
     }
 

@@ -2,9 +2,9 @@
 #define HW1_INSERTION_SORT_H
 
 #include <vector>
-int insertionSort(std::vector<int>::iterator begin,
+std::size_t insertionSort(std::vector<int>::iterator begin,
                    std::vector<int>::iterator end);
 
-int insertionBinarySort(std::vector<int> &vec);
+void insertionBinarySort(std::vector<int> &vec, std::size_t *count);
 
 #endif//HW1_INSERTION_SORT_H

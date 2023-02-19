@@ -3,8 +3,8 @@
 
 #include <vector>
 
-void shellSortCiur(std::vector<int> &vec, int n);
+std::size_t shellSortCiur(std::vector<int> &vec, int n);
 
-void shellSort(std::vector<int> &vec, int n);
+std::size_t shellSort(std::vector<int> &vec, int n);
 
 #endif//HW1_SHELL_SORT_H
