@@ -51,6 +51,7 @@ void insertionBinarySort(std::vector<int> &vec, int n, std::size_t *count) {
         while (j >= position) {
             vec[j + 1] = vec[j];
             j--;
+            *count += 10;
         }
         vec[j + 1] = tmp;
         *count += 15;

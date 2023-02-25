@@ -128,19 +128,19 @@ class Distributor {
     }
 
     void initializeMap() {
-        map["selection"] = adapterSelectionSort;
-        map["bubble"] = adapterBubbleSort;
-        map["bubbleiv1"] = adapterBubbleIversonOneSort;
-        map["bubbleiv2"] = adapterBubbleIversonTwoSort;
-        map["insertion"] = adapterInsertionSort;
+//        map["selection"] = adapterSelectionSort;
+//        map["bubble"] = adapterBubbleSort;
+//        map["bubbleiv1"] = adapterBubbleIversonOneSort;
+//        map["bubbleiv2"] = adapterBubbleIversonTwoSort;
+//        map["insertion"] = adapterInsertionSort;
         map["insertionbinary"] = adapterInsertionBinarySort;
-        map["counting"] = adapterCountingSort;
-        map["radix"] = adapterRadixSort;
-        map["merge"] = adapterMergeSort;
-        map["quick"] = adapterQuickSort;
-        map["heap"] = adapterHeapSort;
-        map["shell"] = adapterShellSort;
-        map["shellciur"] = adapterShellCiurSort;
+//        map["counting"] = adapterCountingSort;
+//        map["radix"] = adapterRadixSort;
+//        map["merge"] = adapterMergeSort;
+//        map["quick"] = adapterQuickSort;
+//        map["heap"] = adapterHeapSort;
+//        map["shell"] = adapterShellSort;
+//        map["shellciur"] = adapterShellCiurSort;
 
         sortNames = std::vector<std::string>();
         sortNames.reserve(map.size());

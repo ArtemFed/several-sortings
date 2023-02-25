@@ -12,8 +12,8 @@
 #include "Distributor.cpp"
 #include "Generator.cpp"
 
-#define COUNT_OF_REPETITIONS 8
-#define COUNT_OF_GENERATIONS 3
+#define COUNT_OF_REPETITIONS 10
+#define COUNT_OF_GENERATIONS 5
 #define COUNT_OF_GENERATORS 4
 
 /**

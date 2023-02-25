@@ -18,7 +18,7 @@ int digit(int elem, int i) {
 void msdRadixSort(std::vector<int> &vec_a, std::vector<int> &vec_help, int l, int r, int d, std::size_t *count) {
 
     // d - текущий разряд для сортировки
-    if ((r - l) < 128) {
+    if ((r - l) < 3) {
         *count += 6 + (r - l) * int(std::log2(r - l));// n * log2(n)
         // Вызываем обычную сортирвку, если границы близки
         std::sort(vec_a.begin() + l, vec_a.begin() + r);
